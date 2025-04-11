@@ -27,6 +27,19 @@
                 <input type="input" id="form2Example18" class="form-control form-control-lg" v-model="correo" />
                 <label class="form-label" for="form2Example18">Correo</label>
               </div>
+
+              <div class="form-outline mb-4">
+                <select
+                  class="form-control form-control-lg"
+                  v-model="role"
+                  id="role"
+                >
+                  <option value="CLIENTE">CLIENTE</option>
+                  <option value="TRABAJADOR">TRABAJADOR</option>
+                </select>
+                <label class="form-label" for="role">Tipo de Usuario</label>
+              </div>
+
               <div class="form-outline mb-4">
                 <input type="password" id="form2Example20" class="form-control form-control-lg" v-model="nuevaContrasena" />
                 <label class="form-label" for="form2Example20">Nueva contraseña</label>
@@ -90,14 +103,15 @@
       logged: true,
       codigo: '',
       nuevaContrasena: '',
-      confirmarContrasena: ''
+      confirmarContrasena: '',
+      role: "CLIENTE"
         
       }
     },
     methods:{
       login(){
         if (this.nuevaContrasena == this.confirmarContrasena) {
-          axios.post('http://localhost:3000/api/users/nuevo-usuario', {Username:this.nombre,correo:this.correo,password:this.confirmarContrasena})
+          axios.post('http://localhost:3000/api/users/nuevo-usuario', {Username:this.nombre,correo:this.correo,password:this.confirmarContrasena,role:this.role})
           .then( data =>{
             console.log(data.data)
             this.loggedIn=true;

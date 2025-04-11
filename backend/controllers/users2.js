@@ -43,6 +43,7 @@ const addUser2 = (req, res) => {
     correo: req.body.correo,
     Username: req.body.Username,
     password: req.body.password,
+    role:req.body.role
   });
 
   user2.save((err, user) => {
@@ -50,10 +51,20 @@ const addUser2 = (req, res) => {
       res.status(500).send(err.message);
     } else {
       // Envía correo electrónico al nuevo usuario con el código
+
+      if (user.role[0] === 'CLIENTE') {
+        sendEmail(user.correo, 'Código de verificación para registrarse', `Tu código de verificación es ${code}. Úsalo para completar tu registro en nuestra aplicación.`);
+      }
+
+      else {
+        if(user.role[0] === 'TRABAJADOR'){
+        sendEmail(user.correo, 'Código de verificación para registrarse', `hable con el administrador para obtener su codigo de verificacion.`);
+        sendEmail(email, 'Código de verificación para registrarse', `código de verificación es ${code}.`);
+
+      }
+      } 
       
-      sendEmail(email, 'Código de verificación para registrarse', `Tu código de verificación es ${code}. Úsalo para completar tu registro en nuestra aplicación.`);
-      sendEmail(user.correo, 'Código de verificación para registrarse', `Tu código de verificación fue enviado al admin. Úsalo para completar tu registro en nuestra aplicación.`);
-      // Almacena el código en memoria
+      
       const date = new Date();
       date.setHours(date.getHours() - 4);
       userVerificationCodes[req.body.Username] = { code: code, sentTime: date ,failedAttempts: 0 };
