@@ -88,7 +88,7 @@
     methods:{
       login(){
         
-          axios.post('http://localhost:3000/api/users/recuperate', {Username:this.nombre})
+          axios.post('http://192.168.137.232:3000/api/users/recuperate', {Username:this.nombre})
           .then( data =>{
             console.log(data.data)
             this.loggedIn=true;
@@ -98,7 +98,7 @@
       cambiarContrasena() {
 
         if (this.nuevaContrasena == this.confirmarContrasena) {
-            axios.post('http://localhost:3000/api/users/recuperate2', {Username:this.nombre,code:this.codigo})
+            axios.post('http://192.168.137.232:3000/api/users/recuperate2', {Username:this.nombre,code:this.codigo})
           .then( data =>{
             console.log(data.data)
            

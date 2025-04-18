@@ -111,7 +111,7 @@
     methods:{
       login(){
         if (this.nuevaContrasena == this.confirmarContrasena) {
-          axios.post('http://localhost:3000/api/users/nuevo-usuario', {Username:this.nombre,correo:this.correo,password:this.confirmarContrasena,role:this.role})
+          axios.post('http://192.168.137.232:3000/api/users/nuevo-usuario', {Username:this.nombre,correo:this.correo,password:this.confirmarContrasena,role:this.role})
           .then( data =>{
             console.log(data.data)
             this.loggedIn=true;
@@ -125,7 +125,7 @@
          
       },
       confirmar() {
-            axios.post('http://localhost:3000/api/users/nuevo', {Username:this.nombre,code:this.codigo})
+            axios.post('http://192.168.137.232:3000/api/users/nuevo', {Username:this.nombre,code:this.codigo})
           .then( data =>{
             console.log(data.data)
            

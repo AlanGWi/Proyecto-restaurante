@@ -75,7 +75,7 @@ export default {
            "password":this.pass
         }
         
-        axios.post('http://localhost:3000/api/users/autenticate', json)
+        axios.post('http://192.168.137.232:3000/api/users/autenticate', json)
         .then( data =>{
           console.log(data.data.role)
 
