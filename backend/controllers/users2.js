@@ -76,20 +76,27 @@ const addUser2 = (req, res) => {
   
 };
 
-const verifyUser2 = (req, res) => {
+const verifyUser2 = (req, res) => { 
   const code = req.body.code;
   const username = req.body.Username;
   const date = new Date();
-      date.setHours(date.getHours() - 4);
-      console.log(date)
-  
-  if (!userVerificationCodes[username]) {
-    return res.status(404).json({ message: 'Usuario no encontrado '+userVerificationCodes[username] });
-  }
-  const { code: sentCode , sentTime } = userVerificationCodes[username];
+  date.setHours(date.getHours() - 4);
 
-  // Verifica si el código enviado coincide con el original y si ha pasado suficiente tiempo
-  if (toString(sentCode) === toString(code) && (date - sentTime) <=600000) {
+  if (!userVerificationCodes[username]) {
+    return res.status(404).json({ message: 'Usuario no encontrado ' + userVerificationCodes[username] });
+  }
+
+  if (!code) {
+    return res.status(400).json({ message: 'Código de verificación no proporcionado.' });
+  }
+
+  const { code: sentCode, sentTime } = userVerificationCodes[username];
+
+  if (!sentCode) {
+    return res.status(500).json({ message: 'Error interno: Código de verificación no disponible.' });
+  }
+
+  if (String(sentCode) === String(code) && (date - sentTime) <= 600000) {
     User2.findOneAndUpdate({ Username: username }, { verified: true }, { new: true }, (err, user) => {
       if (err) {
         res.status(500).send(err.message);
@@ -100,11 +107,8 @@ const verifyUser2 = (req, res) => {
   } else {
     console.log('code:', code, 'sentCode:', sentCode);
 
-    // Incrementa el contador de intentos fallidos y verifica si se ha alcanzado el máximo
     userVerificationCodes[username].failedAttempts++;
     if (userVerificationCodes[username].failedAttempts >= 2) {
-      // Invalida el código y requiere que el usuario solicite un nuevo código de verificación
-      
       User2.deleteOne({ Username: username }, (err) => {
         if (err) {
           res.status(500).send(err.message);
@@ -118,7 +122,6 @@ const verifyUser2 = (req, res) => {
     }
   }
 };
-
 // Función para autenticar usuario y crear token
 const autUser2 = (req, res) => {
   console.log(req.body)

@@ -76,25 +76,27 @@ export default {
         }
         
         axios.post('http://192.168.137.232:3000/api/users/autenticate', json)
-        .then( data =>{
-          console.log(data.data.role)
+        .then(data => {
+          console.log(data.data.role);
 
-            if(data.data.role== "ADMIN"){
-             
-              localStorage.token = data.data.token;
-              localStorage.Username=data.data.Username;
-              localStorage.role=data.data.role;
-              this.$router.replace("/");
-              
-             
-            }
-            if(data.data.role== "OPERADOR"){
-              localStorage.token = data.data.token;
-              localStorage.Username=data.data.Username;
-                this.$router.push("/");
-            }
-            
+          if (data.data.role === "ADMIN") {
+            localStorage.token = data.data.token;
+            localStorage.Username = data.data.Username;
+            localStorage.role = data.data.role;
+            this.$router.replace("/");
+          }
+
+          if (data.data.role === "OPERADOR") {
+            localStorage.token = data.data.token;
+            localStorage.Username = data.data.Username;
+            this.$router.push("/");
+          }
         })
+        .catch(error => {
+      console.error('Error al confirmar:', error);
+      alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+       });
+        
     }
   }
 }

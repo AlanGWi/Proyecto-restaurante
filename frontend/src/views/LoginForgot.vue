@@ -94,6 +94,11 @@
             this.loggedIn=true;
             this.logged=false;
           })
+          .catch(error => {
+           console.error('Error al confirmar:');
+          alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+       });
+          
       },
       cambiarContrasena() {
 
@@ -103,13 +108,13 @@
             console.log(data.data)
            
           })
+          .catch(error => {
+            console.error('Error al confirmar:');
+            alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+    });
         }
-        else{
-            window.alert("las contraseñas no son iguales")
-        }
-
-       
     }
+    
     }
   }
   
