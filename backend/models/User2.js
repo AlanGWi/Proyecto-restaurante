@@ -22,17 +22,17 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', function(next) {
     var user = this;
 
-    // only hash the password if it has been modified (or is new)
+       // Solo hashear la contraseña si ha sido modificada (o si es nueva)
     if (!user.isModified('password')) return next();
 
-    // generate a salt
+    // genera un salto
     bcrypt.genSalt(10, function(err, salt) {
         if (err) return next(err);
 
-        // hash the password using our new salt
+     // Hashear la contraseña usando la nueva sal
         bcrypt.hash(user.password, salt, function(err, hash) {
             if (err) return next(err);
-            // override the cleartext password with the hashed one
+              // Reemplazar la contraseña en texto plano con la versión hasheada
             user.password = hash;
             next();
         });

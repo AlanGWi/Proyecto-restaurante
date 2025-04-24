@@ -64,7 +64,6 @@ const addUser2 = (req, res) => {
       }
       } 
       
-      
       const date = new Date();
       date.setHours(date.getHours() - 4);
       userVerificationCodes[req.body.Username] = { code: code, sentTime: date ,failedAttempts: 0 };
@@ -202,15 +201,11 @@ const RecuperarCuentaCodigo = (req, res) => {
   });
 };
 
-/* GET users listing. */
-const verUser2 = (req, res, next) => {
-  res.send('respond with a resource');
-};
+
 
 module.exports = {
   addUser2,
   autUser2,
-  verUser2,
   verifyUser2,
   RecuperarCuenta,
   RecuperarCuentaCodigo
