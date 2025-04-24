@@ -7,7 +7,7 @@ var cors = require('cors')
 const mongoose = require('mongoose');
 
 const Users= require("./api/users");
-const User2 = require("./models/User2+");
+const User2 = require("./models/User2");
 
 
 var app = express();
