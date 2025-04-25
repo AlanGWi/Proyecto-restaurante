@@ -76,49 +76,56 @@ const addUser2 = (req, res) => {
   
 };
 
-const verifyUser2 = (req, res) => {
+const verifyUser2 = (req, res) => { 
   const code = req.body.code;
   const username = req.body.Username;
   const date = new Date();
-      date.setHours(date.getHours() - 4);
-      console.log(date)
+  date.setHours(date.getHours() - 4); // Ajuste de zona horaria
   
   if (!userVerificationCodes[username]) {
-    return res.status(404).json({ message: 'Usuario no encontrado '+userVerificationCodes[username] });
+    return res.status(404).json({ message: 'Usuario no encontrado' });
   }
-  const { code: sentCode , sentTime } = userVerificationCodes[username];
 
-  // Verifica si el código enviado coincide con el original y si ha pasado suficiente tiempo
-  if (toString(sentCode) === toString(code) && (date - sentTime) <=600000) {
+  const { code: sentCode, sentTime } = userVerificationCodes[username];
+
+  // Convierte sentCode a string porque llega como objeto
+  const sentCodeString = sentCode.toString();
+  const codeString = code.toString(); // Asegura que code sea una cadena
+
+  // Verifica si el código enviado coincide con el original y si no ha pasado demasiado tiempo
+  if (sentCodeString === codeString && (date - sentTime) <= 600000) {
+    // Verificación exitosa, actualizar el usuario como verificado
     User2.findOneAndUpdate({ Username: username }, { verified: true }, { new: true }, (err, user) => {
       if (err) {
-        res.status(500).send(err.message);
+        return res.status(500).send(err.message);
       } else {
-        res.status(200).json(user);
+        return res.status(200).json(user);
       }
     });
   } else {
     console.log('code:', code, 'sentCode:', sentCode);
 
-    // Incrementa el contador de intentos fallidos y verifica si se ha alcanzado el máximo
-    userVerificationCodes[username].failedAttempts++;
-    if (userVerificationCodes[username].failedAttempts >= 2) {
-      // Invalida el código y requiere que el usuario solicite un nuevo código de verificación
-      
+    // Incrementa el contador de intentos fallidos
+    userVerificationCodes[username].failedAttempts = (userVerificationCodes[username].failedAttempts || 0) + 1;
+
+    // Si el número de intentos fallidos es mayor  3, eliminar usuario
+    if (userVerificationCodes[username].failedAttempts > 3) {
+      // Eliminar al usuario de la base de datos
       User2.deleteOne({ Username: username }, (err) => {
         if (err) {
-          res.status(500).send(err.message);
+          return res.status(500).send(err.message);
         } else {
+          // Eliminar los intentos fallidos del objeto en memoria
           delete userVerificationCodes[username];
-          res.status(200).json({ message: 'Usuario eliminado correctamente' });
+          return res.status(200).json({ message: 'Usuario eliminado correctamente debido a intentos fallidos de verificación.' });
         }
       });
     } else {
-      res.status(401).json({ message: 'Código de verificación inválido o ha expirado. Por favor, inténtalo de nuevo.' });
+      // Notificar al usuario que el código es incorrecto
+      res.status(401).json({ message: 'Código de verificación inválido. Intentos fallidos: ' + userVerificationCodes[username].failedAttempts });
     }
   }
 };
-
 // Función para autenticar usuario y crear token
 const autUser2 = (req, res) => {
   console.log(req.body)

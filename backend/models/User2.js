@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   token: {type: String,required: [false, 'Session token is not mandatory'],default: '' },
   code: { type: String },
   correo: {type: String},
-  verified: { type: Boolean, default: false } 
+  verified: { type: Boolean, default: false } // Nuevo campo "verified
   
 });
 //

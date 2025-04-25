@@ -7,7 +7,10 @@ var cors = require('cors')
 const mongoose = require('mongoose');
 
 const Users= require("./api/users");
+const Menu = require("./api/menu")
+const Pedidos = require("./api/pedidos")
 const User2 = require("./models/User2");
+const TransbankRoutes = require("./api/transbank");
 
 
 var app = express();
@@ -47,7 +50,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //rutas
 app.use('/api/users', Users);
-
+app.use('/api/menu', Menu);
+app.use('/api/pedidos', Pedidos);
+app.use('/api/transbank', TransbankRoutes); // Agregar la ruta de Transbank
 
 
 module.exports = app;
