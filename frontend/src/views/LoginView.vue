@@ -53,6 +53,7 @@
 import axios from 'axios'
 import HederViewVue from '@/components/HederView.vue'
 
+
 export default {
   name: 'LoginView',
 
@@ -76,25 +77,40 @@ export default {
         }
         
         axios.post('http://localhost:3000/api/users/autenticate', json)
-        .then( data =>{
-          console.log(data.data.role)
+  .then(response => {
+    console.log(response.data)
+    const { token, Username, role ,user_id} = response.data;
 
-            if(data.data.role== "ADMIN"){
-             
-              localStorage.token = data.data.token;
-              localStorage.Username=data.data.Username;
-              localStorage.role=data.data.role;
-              this.$router.replace("/");
-              
-             
-            }
-            if(data.data.role== "OPERADOR"){
-              localStorage.token = data.data.token;
-              localStorage.Username=data.data.Username;
-                this.$router.push("/");
-            }
-            
-        })
+    const userRole = Array.isArray(role) ? role[0] : role; 
+
+    
+
+    // Guardar datos en localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("Username", Username);
+    localStorage.setItem("role", userRole);
+    localStorage.setItem("id", user_id);
+
+    // Redireccionar según el rol
+    switch (userRole) {
+      case "ADMIN":
+        this.$router.push("/");
+        break;
+      case "TRABAJADOR":
+      this.$router.push("/");
+      break;
+      case "CLIENTE":
+        this.$router.push("/");
+        break;
+      default:
+        alert("Rol no reconocido");
+    }
+  })
+  .catch(error => {
+    console.error('Error al confirmar:', error);
+    alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+  });
+        
     }
   }
 }

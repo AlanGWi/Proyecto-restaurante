@@ -94,22 +94,29 @@
             this.loggedIn=true;
             this.logged=false;
           })
+          .catch(error => {
+           console.error('Error al confirmar:');
+          alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+       });
+          
       },
       cambiarContrasena() {
 
         if (this.nuevaContrasena == this.confirmarContrasena) {
-            axios.post('http://localhost:3000/api/users/recuperate2', {Username:this.nombre,code:this.codigo})
+            axios.post('http://localhost:3000/api/users/recuperate2', {Username:this.nombre,code:this.codigo, password:this.nuevaContrasena})
           .then( data =>{
-            console.log(data.data)
-           
+            console.log(data)
+            
+            this.$router.push("/");
+            
           })
+          .catch(error => {
+            console.error('Error al confirmar:');
+            alert("Ocurrió un error: " + (error.response?.data?.message || error.message));
+    });
         }
-        else{
-            window.alert("las contraseñas no son iguales")
-        }
-
-       
     }
+    
     }
   }
   

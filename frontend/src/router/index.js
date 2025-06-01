@@ -18,7 +18,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
   },
 
-
+  {
+    path: '/pedidos',
+    name: 'pedidos',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/PedidosMenu.vue')
+  },
 
 
   {
@@ -33,8 +40,91 @@ const routes = [
     component: () => import( '../views/LoginRegister.vue')
   },
 
+    {
+    path: '/editarUser',
+    name: 'editarUser',
+    component: () => import( '../views/EditarUser.vue')
+  },
+
+  {
+    path: '/carrito/:ids',
+    name: 'carrito',
+    component: () => import( '../views/CarritoView.vue')
+  },
+  {
+    path: '/editar/:id',
+    name: 'editar',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/EditarMenu.vue')
+  },
+  {
+    path: '/agregar',
+    name: 'agregar',
+    component: () => import( '../views/AgregarMenu.vue')
+  },
+
+  {
+    path: '/deshabilitados',
+    name: 'deshabilitados',
+    component: () => import( '../views/ProDeshabilitados.vue')
+  },
+
+  {
+    path: '/pago',
+    name: 'pago',
+    component: () => import( '../views/PagoView.vue')
+  },
 
   
+  {
+    path: '/confirmacion', // Agregar la nueva ruta para confirmar el pago
+    name: 'confirmacion',
+    component: () => import('../views/ConfirmacionView.vue')
+  },
+
+  {
+    path: '/reservas', // Agregar la nueva ruta para confirmar el pago
+    name: 'reservas',
+    component: () => import('../views/ReservasView.vue')
+  },
+
+  {
+    path: '/estadistica',
+    name: 'estadistica',
+    component: () => import( '../views/EstadisticasView.vue')
+  },
+
+    {
+    path: '/mesas',
+    name: 'mesas',
+    component: () => import( '../views/MesasView.vue')
+  },
+
+     {
+    path: '/vermesas',
+    name: 'vermesas',
+    component: () => import( '../views/VerMesas.vue')
+  },
+
+       {
+    path: '/EditarReservas',
+    name: 'EditarReservas',
+    component: () => import( '../views/ModificarReservas.vue')
+  },
+
+        {
+    path: '/verReservas',
+    name: 'verReservas',
+    component: () => import( '../views/VerReservas.vue')
+  },
+
+       {
+    path: '/TotalPedidos',
+    name: 'TotalPedidos',
+    component: () => import( '../views/TotalPedidosPago.vue')
+  },
 ]
 
 const router = createRouter({
